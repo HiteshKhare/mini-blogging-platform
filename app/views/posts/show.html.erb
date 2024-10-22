@@ -1,0 +1,30 @@
+<h1><%= @post.title %></h1>
+<p><%= @post.body %></p>
+<p>Posted by <%= @post.user.name %></p>
+
+<h2>Comments</h2>
+<ul>
+  <% @post.comments.each do |comment| %>
+    <li>
+      <strong><%= comment.user.name %>:</strong>
+      <%= comment.body %>
+      <% if comment.user == current_user %>
+        <%= link_to 'Delete', [@post, comment], method: :delete, data: { confirm: 'Are you sure?' } %>
+      <% end %>
+    </li>
+  <% end %>
+</ul>
+
+<h3>Add a Comment</h3>
+<%= form_with(model: [ @post, Comment.new ], local: true) do |form| %>
+  <div class="field">
+    <%= form.label :body %>
+    <%= form.text_area :body %>
+  </div>
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>
+
+<%= link_to 'Edit', edit_post_path(@post) %> |
+<%= link_to 'Back', posts_path %>
