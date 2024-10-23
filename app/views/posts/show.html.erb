@@ -11,9 +11,9 @@
 <ul>
   <% @post.comments.each do |comment| %>
     <li>
-      <strong><%= comment.user.name %>:</strong>
+      <strong><%= comment.post.user.name %>:</strong>
       <%= comment.body %>
-      <% if comment.user == current_user %>
+      <% if comment.post.user == current_user %>
         <%= link_to 'Delete', [@post, comment], method: :delete, data: { confirm: 'Are you sure?' } %>
       <% end %>
     </li>

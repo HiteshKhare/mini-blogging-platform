@@ -2,19 +2,19 @@
 class Api::V1::CommentsController < ApplicationController
   before_action :set_post
   before_action :set_comment, only: [:show, :update, :destroy]
+  skip_before_action :authenticate_user!
 
   def index
-    comments = @post.comments.includes(:user)
-    render json: comments.as_json(include: :user), status: :ok
+    comments = @post.comments
+    render json: comments.as_json, status: :ok
   end
 
   def show
-    render json: @comment.as_json(include: :user), status: :ok
+    render json: @comment.as_json, status: :ok
   end
 
   def create
     comment = @post.comments.build(comment_params)
-    comment.user = User.find(params[:comment][:user_id])  # Assuming user_id is provided in the request
 
     if comment.save
       CommentNotificationJob.perform_later(comment)
