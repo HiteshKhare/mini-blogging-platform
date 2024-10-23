@@ -1,14 +1,19 @@
 class PostsController < ApplicationController
   include Rails.application.routes.url_helpers
   before_action :authenticate_user!, except: [:index, :show]
-  before_action :set_post, only: [:show, :edit, :update, :destroy]
+  before_action :set_post, only: [:edit, :update, :destroy]
   before_action :authorize_post, only: [:update, :destroy]
 
   def index
     if params[:query].present?
-      @posts = Post.includes(:user).search_by_title_and_body(params[:query])
+      @posts = Post.includes(:user)
+                    .search_by_title_and_body(params[:query])
+                    .page(params[:page]) # Add pagination here
+                    .per(5) # Adjust per page as needed
     else
-      @posts = Post.includes(:user).all
+      @posts = Post.includes(:user)
+                    .page(params[:page]) # Add pagination here
+                    .per(5) # Adjust per page as needed
     end
   end
 
@@ -22,6 +27,7 @@ class PostsController < ApplicationController
   end
 
   def show
+    @post = Post.includes(:user, :comments).find(params[:id])
   end
 
   def new

@@ -15,17 +15,43 @@ class Api::V1::PostsController < ApplicationController
   end
 
   def index
-    posts = Rails.cache.fetch('api_posts_list', expires_in: 12.hours) do
-      Post.includes(:user, :comments).all
+    # Fetch posts with eager loading for user and comments
+    posts = Post.includes(:user, :comments).page(params[:page]).per(2) # Adjust per page as needed
+
+    response = Rails.cache.fetch('api_posts_list', expires_in: 12.hours) do
+      posts.map do |post|
+        {
+          id: post.id,
+          title: post.title,
+          body: post.body,
+          user: {
+            id: post.user.id,
+            email: post.user.email,
+            name: post.user.name
+          },
+          comments: post.comments.map do |comment|
+            {
+              id: comment.id,
+              body: comment.body,
+              created_at: comment.created_at
+            }
+          end
+        }
+      end
     end
 
-    render json: posts.as_json(include: { user: { only: [:id, :email, :name] }, comments: { include: { user: { only: [:id, :email, :name] } } } }), status: :ok
+    render json: response, status: :ok
   end
 
   def show
-	  post = Post.includes(:user, :comments).find(params[:id])
-	  render json: post.as_json(include: { user: { only: [:id, :email, :name] }, comments: { include: { user: { only: [:id, :email, :name] } } } }), status: :ok
-	end
+    post = Post.includes(:user, :comments).find(params[:id])
+    render json: post.as_json(
+      include: {
+        user: { only: [:id, :email, :name] },
+        comments: { only: [:id, :body, :created_at] }  # Exclude user from comments
+      }
+    ), status: :ok
+  end
 
   def create
   post = current_user.posts.build(post_params)

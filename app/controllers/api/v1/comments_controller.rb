@@ -5,7 +5,7 @@ class Api::V1::CommentsController < ApplicationController
   skip_before_action :authenticate_user!
 
   def index
-    comments = @post.comments
+    comments = @post.comments.page(params[:page]).per(10)
     render json: comments.as_json, status: :ok
   end
 
