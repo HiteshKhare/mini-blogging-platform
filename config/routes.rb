@@ -1,21 +1,33 @@
 Rails.application.routes.draw do
   get "comments/create"
   get "comments/destroy"
-  # get "posts/index"
-  # get "posts/show"
-  # get "posts/new"
-  # get "posts/create"
-  # get "posts/edit"
-  # get "posts/update"
-  # get "posts/destroy"
 
   devise_for :users
+  namespace :api do
+    namespace :v1 do
+      devise_for :users, controllers: {
+        registrations: 'api/v1/users/registrations',
+        sessions: 'api/v1/users/sessions'
+      }
+    end
+  end
+
   resources :users, only: [:edit, :update]
-  # root 'home#index' # Assuming you will create a HomeController for the root page
+  # root 'home#index' 
   root to: 'posts#index'
   resources :posts do
     resources :comments, only: [:create, :destroy]
   end
+
+  namespace :api do
+    namespace :v1 do
+      resources :posts do
+        resources :comments
+      end
+    end
+  end
+
+
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
