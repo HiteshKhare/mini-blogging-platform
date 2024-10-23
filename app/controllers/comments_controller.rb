@@ -7,11 +7,15 @@ class CommentsController < ApplicationController
     @comment.user = current_user
 
     if @comment.save
+      # Enqueue the job to send notification
+      CommentNotificationJob.perform_later(@comment)
+
       redirect_to @post, notice: 'Comment was successfully created.'
     else
       redirect_to @post, alert: 'Comment could not be created.'
     end
   end
+
 
   def destroy
     @comment = Comment.find(params[:id])

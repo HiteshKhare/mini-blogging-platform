@@ -92,7 +92,14 @@ API steps:-
 
 	Delete a Comment URL - DELETE - http://localhost:3000/api/v1/posts/1/comments/1
 
-	
+	Post search by Title or Body name URL - GET - http://localhost:3000/api/v1/posts/search?query=Title1
 
+
+Test Email Sending Again
+	Note: I have user letter_opener gem for this
+
+	Add a Comment: Try adding a comment through UI in our application. The email should now be opened in a new browser tab instead of being sent out.
+
+	Check the Browser: After adding a comment, check if the email preview appears in our browser.
 
 
