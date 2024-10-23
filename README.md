@@ -103,3 +103,13 @@ Test Email Sending Again
 	Check the Browser: After adding a comment, check if the email preview appears in our browser.
 
 
+Coverage of Roles
+	Authors: They can update and destroy their own posts because authorize_post only allows actions if the user is the post's author.
+
+	Guests: They will not reach the update or destroy actions since those actions require authentication and authorization, which guests do not meet.
+
+	
+
+
+
+

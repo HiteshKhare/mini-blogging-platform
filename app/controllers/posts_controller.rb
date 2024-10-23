@@ -1,6 +1,7 @@
 class PostsController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show]
   before_action :set_post, only: [:show, :edit, :update, :destroy]
+  before_action :authorize_post, only: [:update, :destroy]
 
   def index
     if params[:query].present?
@@ -59,6 +60,10 @@ class PostsController < ApplicationController
 
   def set_post
     @post = Post.find(params[:id])
+  end
+
+  def authorize_post
+    authorize @post
   end
 
   def post_params

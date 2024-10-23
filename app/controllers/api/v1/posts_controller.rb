@@ -2,6 +2,7 @@
 class Api::V1::PostsController < ApplicationController
   before_action :authenticate_user!, only: [:create, :update, :destroy]
   before_action :set_post, only: [:show, :update, :destroy]
+  before_action :authorize_post, only: [:update, :destroy]
 
   def search
     if params[:query].present?
@@ -33,7 +34,7 @@ class Api::V1::PostsController < ApplicationController
     else
       render json: { error: post.errors.full_messages }, status: :unprocessable_entity
     end
-end
+  end
 
   def update
     if @post.update(post_params)
@@ -52,6 +53,10 @@ end
 
   def set_post
     @post = Post.find(params[:id])
+  end
+
+  def authorize_post
+    authorize @post
   end
 
   def post_params
