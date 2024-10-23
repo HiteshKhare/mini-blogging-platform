@@ -5,6 +5,11 @@
 
 <h1><%= @post.title %></h1>
 <p><%= @post.body %></p>
+<% if @post.image.attached? %>
+  <div>
+    <%= image_tag @post.image %>
+  </div>
+<% end %>
 <p>Posted by <%= @post.user.name %></p>
 
 <h2>Comments</h2>

@@ -9,4 +9,7 @@ class Post < ApplicationRecord
                   using: {
                     tsearch: { prefix: true }
                   }
+
+  has_one_attached :image
+
 end

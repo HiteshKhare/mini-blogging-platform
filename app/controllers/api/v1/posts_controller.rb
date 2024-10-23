@@ -1,4 +1,5 @@
-# app/controllers/api/v1/posts_controller.rb
+require 'open-uri'
+
 class Api::V1::PostsController < ApplicationController
   before_action :authenticate_user!, only: [:create, :update, :destroy]
   before_action :set_post, only: [:show, :update, :destroy]
@@ -27,14 +28,23 @@ class Api::V1::PostsController < ApplicationController
 	end
 
   def create
-    post = current_user.posts.build(post_params)
-    if post.save
-      Rails.cache.delete('api_posts_list') # Expire the cached posts list
-      render json: post, status: :created
-    else
-      render json: { error: post.errors.full_messages }, status: :unprocessable_entity
+  post = current_user.posts.build(post_params)
+
+  if post.save
+    # Attach the uploaded image file if it exists
+    if post_params[:image].present?
+      post.image.attach(post_params[:image])
+      post.update(image_url: post.image.url)
     end
+
+    Rails.cache.delete('api_posts_list') # Expire the cached posts list
+
+    render json: post, status: :created
+  else
+    render json: { error: post.errors.full_messages }, status: :unprocessable_entity
   end
+end
+
 
   def update
     if @post.update(post_params)
@@ -60,6 +70,6 @@ class Api::V1::PostsController < ApplicationController
   end
 
   def post_params
-    params.require(:post).permit(:title, :body)
+    params.require(:post).permit(:title, :body, :image)
   end
 end

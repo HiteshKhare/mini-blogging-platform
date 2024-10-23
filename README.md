@@ -108,7 +108,11 @@ Coverage of Roles
 
 	Guests: They will not reach the update or destroy actions since those actions require authentication and authorization, which guests do not meet.
 
-	
+The api_posts_list cache key doesn't need to be explicitly defined anywhere; it's simply a string that serves as the key for caching in our controller.
+(I'm using it in Api::V1::PostsController)
+
+
+
 
 
 
