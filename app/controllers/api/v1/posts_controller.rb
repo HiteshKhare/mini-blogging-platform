@@ -3,6 +3,16 @@ class Api::V1::PostsController < ApplicationController
   before_action :authenticate_user!, only: [:create, :update, :destroy]
   before_action :set_post, only: [:show, :update, :destroy]
 
+  def search
+    if params[:query].present?
+      posts = Post.includes(:user).search_by_title_and_body(params[:query])
+      render json: posts.as_json(include: :user), status: :ok
+    else
+      render json: { error: 'Query parameter is required' }, status: :bad_request
+    end
+  end
+
+
 	def index
 	  posts = Post.includes(:user, :comments).all
 	  render json: posts.as_json(include: { user: { only: [:id, :email, :name] }, comments: { include: { user: { only: [:id, :email, :name] } } } }), status: :ok

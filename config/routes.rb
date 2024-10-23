@@ -17,12 +17,18 @@ Rails.application.routes.draw do
   root to: 'posts#index'
   resources :posts do
     resources :comments, only: [:create, :destroy]
+    collection do
+      get 'search'
+    end
   end
 
   namespace :api do
     namespace :v1 do
       resources :posts do
         resources :comments
+        collection do
+          get 'search'
+        end
       end
     end
   end

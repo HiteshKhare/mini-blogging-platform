@@ -3,7 +3,20 @@ class PostsController < ApplicationController
   before_action :set_post, only: [:show, :edit, :update, :destroy]
 
   def index
-    @posts = Post.all
+    if params[:query].present?
+      @posts = Post.includes(:user).search_by_title_and_body(params[:query])
+    else
+      @posts = Post.includes(:user).all
+    end
+  end
+
+  def search
+    if params[:query].present?
+      @posts = Post.includes(:user).search_by_title_and_body(params[:query])
+      render :index
+    else
+      redirect_to posts_path, alert: 'Query parameter is required'
+    end
   end
 
   def show

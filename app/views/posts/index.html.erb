@@ -2,12 +2,23 @@
 
 <%= link_to 'New Post', new_post_path, class: 'btn btn-primary' %>
 
+<%= form_with(url: search_posts_path, method: :get, local: true) do %>
+  <%= label_tag :query, "Search Posts" %>
+  <%= text_field_tag :query, params[:query] %>
+  <%= submit_tag "Search" %>
+<% end %>
+
 <ul>
   <% @posts.each do |post| %>
     <li>
-      <%= link_to post.title, post %> by <%= post.user.name %>
-      <%= link_to 'Edit', edit_post_path(post) %>
+      <%= link_to post.title, post %><br>
+      by <%= post.user.name %><br>
+      Body: <%= post.body %><br>
+      <%= link_to 'Edit', edit_post_path(post) %> | 
       <%= link_to 'Destroy', post, method: :delete, data: { confirm: 'Are you sure?' } %>
     </li>
   <% end %>
 </ul>
+
+
+
