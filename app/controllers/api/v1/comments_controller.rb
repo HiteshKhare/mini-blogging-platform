@@ -17,6 +17,7 @@ class Api::V1::CommentsController < ApplicationController
     comment.user = User.find(params[:comment][:user_id])  # Assuming user_id is provided in the request
 
     if comment.save
+      CommentNotificationJob.perform_later(comment)
       render json: comment, status: :created
     else
       render json: { error: comment.errors.full_messages }, status: :unprocessable_entity

@@ -8,17 +8,16 @@
   <%= submit_tag "Search" %>
 <% end %>
 
-<ul>
-  <% @posts.each do |post| %>
-    <li>
-      <%= link_to post.title, post %><br>
-      by <%= post.user.name %><br>
-      Body: <%= post.body %><br>
-      <%= link_to 'Edit', edit_post_path(post) %> | 
-      <%= link_to 'Destroy', post, method: :delete, data: { confirm: 'Are you sure?' } %>
-    </li>
-  <% end %>
-</ul>
-
-
-
+<% cache 'posts_list' do %>
+  <ul>
+    <% @posts.each do |post| %>
+      <li>
+        <%= link_to post.title, post %><br>
+        by <%= post.user.name %><br>
+        Body: <%= post.body %><br>
+        <%= link_to 'Edit', edit_post_path(post) %> | 
+        <%= link_to 'Destroy', post, method: :delete, data: { confirm: 'Are you sure?' } %>
+      </li>
+    <% end %>
+  </ul>
+<% end %>

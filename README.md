@@ -96,7 +96,7 @@ API steps:-
 
 
 Test Email Sending Again
-	Note: I have user letter_opener gem for this
+	Note: I have used letter_opener gem for this
 
 	Add a Comment: Try adding a comment through UI in our application. The email should now be opened in a new browser tab instead of being sent out.
 

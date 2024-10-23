@@ -29,6 +29,8 @@ class PostsController < ApplicationController
   def create
     @post = current_user.posts.build(post_params)
     if @post.save
+      expire_fragment('posts_list') # Expire the cached posts list
+      Rails.logger.info "Cache for posts list expired after creating post with ID: #{@post.id}"
       redirect_to @post, notice: 'Post was successfully created.'
     else
       render :new
@@ -40,6 +42,8 @@ class PostsController < ApplicationController
 
   def update
     if @post.update(post_params)
+      expire_fragment('posts_list') # Expire the cached posts list
+      Rails.logger.info "Cache for posts list expired after updating post with ID: #{@post.id}"
       redirect_to @post, notice: 'Post was successfully updated.'
     else
       render :edit
