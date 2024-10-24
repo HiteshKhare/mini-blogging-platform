@@ -5,18 +5,18 @@
 
   <div>
     <%= f.label :name %>
-    <%= f.text_field :name, autofocus: true %>
+    <%= f.text_field :name, value: h(resource.name), autofocus: true %> <!-- Escape current name -->
   </div>
 
   <div class="field">
     <%= f.label :email %><br />
-    <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
+    <%= f.email_field :email, value: h(resource.email), autofocus: true, autocomplete: "email" %> <!-- Escape current email -->
   </div>
 
   <div class="field">
     <%= f.label :password %>
     <% if @minimum_password_length %>
-    <em>(<%= @minimum_password_length %> characters minimum)</em>
+      <em>(<%= @minimum_password_length %> characters minimum)</em>
     <% end %><br />
     <%= f.password_field :password, autocomplete: "new-password" %>
   </div>

@@ -5,11 +5,11 @@
 
   <div class="field">
     <%= f.label :email %><br />
-    <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
+    <%= f.email_field :email, value: h(resource.email), autofocus: true, autocomplete: "email" %> <!-- Escape email value -->
   </div>
 
   <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
-    <div>Currently waiting confirmation for: <%= resource.unconfirmed_email %></div>
+    <div>Currently waiting confirmation for: <%= h(resource.unconfirmed_email) %></div> <!-- Escape unconfirmed email -->
   <% end %>
 
   <div class="field">

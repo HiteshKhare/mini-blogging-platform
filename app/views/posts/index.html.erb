@@ -12,9 +12,9 @@
   <ul>
     <% @posts.each do |post| %>
       <li>
-        <%= link_to post.title, post %><br>
-        by <%= post.user.name %><br>
-        Body: <%= post.body %><br>
+        <%= link_to h(post.title), post %><br> <!-- Escape post title -->
+        by <%= h(post.user.name) %><br> <!-- Escape user name -->
+        Body: <%= h(post.body) %><br> <!-- Escape post body -->
         <%= link_to 'Edit', edit_post_path(post) %> | 
         <%= link_to 'Destroy', post, method: :delete, data: { confirm: 'Are you sure?' } %>
       </li>
@@ -22,4 +22,7 @@
   </ul>
 <% end %>
 
-<%= paginate @posts %>
+<% if params[:query].blank? %>
+  <%= paginate @posts %>
+<% end %>
+

@@ -3,12 +3,12 @@
 <%= form_for(@user, url: user_registration_path, html: { method: :put }) do |f| %>
   <div>
     <%= f.label :name %>
-    <%= f.text_field :name %>
+    <%= f.text_field :name, value: h(@user.name) %> <!-- Escape current name -->
   </div>
 
   <div>
     <%= f.label :email %>
-    <%= f.email_field :email %>
+    <%= f.email_field :email, value: h(@user.email) %> <!-- Escape current email -->
   </div>
 
   <div>
