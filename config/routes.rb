@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   get "comments/destroy"
 
   devise_for :users
+  resources :users, only: [:edit, :update]
   namespace :api do
     namespace :v1 do
       devise_for :users, controllers: {
@@ -17,7 +18,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :users, only: [:edit, :update]
+  
   # root 'home#index' 
   root to: 'posts#index'
   resources :posts do

@@ -4,6 +4,9 @@ class Post < ApplicationRecord
   belongs_to :user
   has_many :comments, dependent: :destroy
 
+  validates :title, presence: true
+  validates :body, presence: true
+
   pg_search_scope :search_by_title_and_body,
                   against: [:title, :body],
                   using: {
